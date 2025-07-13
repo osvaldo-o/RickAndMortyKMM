@@ -7,7 +7,6 @@ import io.ktor.client.request.header
 import io.ktor.client.request.parameter
 import io.ktor.client.request.url
 import io.ktor.client.statement.HttpResponse
-import io.ktor.http.URLBuilder
 import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.serialization.SerializationException
 import osvaldo.oso.core.model.Error
@@ -19,7 +18,7 @@ class KtorApiClient(
     val httpClient: HttpClient
 ) {
 
-    val baseUrl = ""
+    val baseUrl = "https://rickandmortyapi.com/api"
 
     suspend inline fun <reified R: Any> get(
         route: String,
