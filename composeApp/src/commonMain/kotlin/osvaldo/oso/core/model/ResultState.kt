@@ -1,3 +1,18 @@
 package osvaldo.oso.core.model
 
-data class ResultState()
+sealed class ResultState<D, E: Error>(
+    val data: D? = null,
+    val error: E? = null
+) {
+
+    class Loading<D>(): ResultState<D, Error>()
+
+    class Success<D>(
+        data: D?
+    ): ResultState<D, Error>(data = data)
+
+    class Failed<D>(
+        error: Error?
+    ): ResultState<D, Error>(error = error)
+
+}

@@ -1,4 +1,4 @@
-package osvaldo.oso.data.remote
+package osvaldo.oso.data.remote.ktorClient
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body

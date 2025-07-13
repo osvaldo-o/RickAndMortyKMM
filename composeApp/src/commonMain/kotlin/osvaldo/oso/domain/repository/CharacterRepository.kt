@@ -1,7 +1,12 @@
 package osvaldo.oso.domain.repository
 
-interface RepositoryApi {
+import osvaldo.oso.core.model.Error
+import osvaldo.oso.core.model.Result
+import osvaldo.oso.data.remote.model.CharacterApi
 
-    fun getChar()
+
+interface CharacterRepository {
+
+    suspend fun getCharacters(): Result<List<CharacterApi>, Error>
 
 }
