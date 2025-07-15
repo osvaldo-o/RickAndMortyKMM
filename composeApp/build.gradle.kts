@@ -45,7 +45,7 @@ kotlin {
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
-            implementation(compose.material)
+            implementation(compose.material3)
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
@@ -59,10 +59,14 @@ kotlin {
             implementation(libs.ktor.client.negotiation)
             implementation(libs.ktor.client.serialization)
 
-            //koin
+            // koin
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.koin.core)
+
+            // coil
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network.ktor)
         }
         nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)
