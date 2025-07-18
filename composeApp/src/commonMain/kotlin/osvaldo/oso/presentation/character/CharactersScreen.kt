@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -30,12 +28,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import osvaldo.oso.domain.model.Character
 import osvaldo.oso.domain.model.Status
 import osvaldo.oso.presentation.component.GlassCard
 
 @Composable
-fun CharacterScreen(
+fun CharactersScreen(
     characters: List<Character>,
     modifier: Modifier = Modifier
 ) {
@@ -179,4 +178,24 @@ private fun BackgroundScreen(
         )
         content()
     }
+}
+
+@Preview
+@Composable
+fun CharacterItemPreview() {
+    val character = Character(
+        name = "Rick Sanchez",
+        status = Status.ALIVE,
+        species = "Human",
+        gender = "Male",
+        urlImage = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+        locationName = "Citadel of Ricks",
+        originName = "Earth (C-137)"
+    )
+    MaterialTheme {
+        Column(Modifier.fillMaxWidth().padding(16.dp)) {
+            CharacterItem(character)
+        }
+    }
+
 }
