@@ -9,4 +9,6 @@ interface CharacterRepository {
 
     suspend fun getCharacters(): Result<List<CharacterApi>, Error>
 
+    suspend fun getCharacterById(id: Int): Result<CharacterApi, Error>
+
 }

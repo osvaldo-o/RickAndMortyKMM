@@ -8,17 +8,16 @@ import osvaldo.oso.domain.mapper.toCharacter
 import osvaldo.oso.domain.model.Character
 import osvaldo.oso.domain.repository.CharacterRepository
 
-class GetCharactersUseCase (
+class GetCharacterUseCase(
     private val repository: CharacterRepository
 ) {
-    fun invoke(): Flow<ResultState<List<Character>, Error>> = flow {
+
+    fun invoke(id: Int): Flow<ResultState<Character, Error>> = flow {
         emit(ResultState.Loading())
-        val response = repository.getCharacters()
+        val response = repository.getCharacterById(id)
         response.error?.let { error ->
             emit(ResultState.Failed(error))
         }
-        emit(ResultState.Success(response.data?.map { characterApi ->
-            characterApi.toCharacter()
-        }))
+        emit(ResultState.Success(response.data?.toCharacter()))
     }
 }
