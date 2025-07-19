@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import osvaldo.oso.core.model.ResultState
+import osvaldo.oso.domain.model.Character
 import osvaldo.oso.domain.usecase.GetCharacterUseCase
 import osvaldo.oso.domain.usecase.GetCharactersUseCase
 
@@ -38,6 +39,10 @@ class HomeViewModel constructor(
                 }
             }
         }.launchIn(viewModelScope)
+    }
+
+    fun setCharacter(character: Character?) {
+        _uiState.update { it.copy(character = character) }
     }
 
     fun getCharacterById(id: Int) {

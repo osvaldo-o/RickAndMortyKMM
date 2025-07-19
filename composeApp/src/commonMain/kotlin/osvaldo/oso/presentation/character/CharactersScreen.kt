@@ -39,7 +39,7 @@ import osvaldo.oso.presentation.component.GlassCard
 @Composable
 fun CharactersScreen(
     characters: List<Character>,
-    onCharacterClick: (Int) -> Unit,
+    onCharacterClick: (Character) -> Unit,
     modifier: Modifier = Modifier,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope
@@ -55,7 +55,7 @@ fun CharactersScreen(
                 items(characters) { character ->
                     CharacterItem(
                         character = character,
-                        onClick = { onCharacterClick(character.id) },
+                        onClick = { onCharacterClick(character) },
                         sharedTransitionScope = sharedTransitionScope,
                         animatedVisibilityScope = animatedVisibilityScope
                     )

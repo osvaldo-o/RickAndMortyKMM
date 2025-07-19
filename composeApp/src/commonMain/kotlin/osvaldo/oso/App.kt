@@ -34,8 +34,8 @@ fun App() {
                     CharactersScreen(
                         characters = uiState.characters,
                         onCharacterClick = {
-                            viewModel.getCharacterById(it)
-                            navController.navigate(CharacterDetailScreen(it))
+                            viewModel.setCharacter(it)
+                            navController.navigate(CharacterDetailScreen)
                         },
                         sharedTransitionScope = this@SharedTransitionLayout,
                         animatedVisibilityScope = this@composable

@@ -6,4 +6,4 @@ import kotlinx.serialization.Serializable
 object CharactersScreen
 
 @Serializable
-data class CharacterDetailScreen(val characterId: Int)
+object CharacterDetailScreen
