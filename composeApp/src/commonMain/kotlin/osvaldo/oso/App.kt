@@ -1,20 +1,60 @@
 package osvaldo.oso
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import osvaldo.oso.presentation.character.CharacterScreen
+import osvaldo.oso.presentation.character.CharactersScreen
+import osvaldo.oso.presentation.navigation.CharacterDetailScreen
+import osvaldo.oso.presentation.navigation.CharactersScreen
 import osvaldo.oso.presentation.viewmodel.home.HomeViewModel
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 @Preview
 fun App() {
     MaterialTheme {
+        val navController = rememberNavController()
         val viewModel: HomeViewModel = koinViewModel()
         val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-        CharacterScreen(uiState.characters)
+        SharedTransitionLayout {
+            NavHost(
+                navController = navController,
+                startDestination = CharactersScreen
+            ) {
+                composable<CharactersScreen> {
+                    CharactersScreen(
+                        characters = uiState.characters,
+                        onCharacterClick = {
+                            viewModel.getCharacterById(it)
+                            navController.navigate(CharacterDetailScreen(it))
+                        },
+                        sharedTransitionScope = this@SharedTransitionLayout,
+                        animatedVisibilityScope = this@composable
+                    )
+                }
+
+                composable<CharacterDetailScreen> {
+                    uiState.character?.let {
+                        CharacterScreen(
+                            character = it,
+                            onBackClick = {
+                                navController.popBackStack()
+                            },
+                            sharedTransitionScope = this@SharedTransitionLayout,
+                            animatedVisibilityScope = this@composable
+                        )
+                    }
+                }
+            }
+        }
     }
 }

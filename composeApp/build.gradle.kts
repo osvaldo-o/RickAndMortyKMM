@@ -52,6 +52,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.material.icons.extended)
 
             // ktor client
             implementation(libs.ktor.client.core)
@@ -67,6 +68,9 @@ kotlin {
             // coil
             implementation(libs.coil.compose)
             implementation(libs.coil.network.ktor)
+
+            // navigation
+            implementation(libs.navigation.compose)
         }
         nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)

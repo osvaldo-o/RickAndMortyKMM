@@ -8,10 +8,12 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import osvaldo.oso.core.model.ResultState
+import osvaldo.oso.domain.usecase.GetCharacterUseCase
 import osvaldo.oso.domain.usecase.GetCharactersUseCase
 
 class HomeViewModel constructor(
-    private val getCharactersUseCase: GetCharactersUseCase
+    private val getCharactersUseCase: GetCharactersUseCase,
+    private val getCharacterByIdUseCase: GetCharacterUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
@@ -33,6 +35,20 @@ class HomeViewModel constructor(
                     resultState.data?.let { characters ->
                         _uiState.update { it.copy(characters = characters) }
                     }
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    fun getCharacterById(id: Int) {
+        getCharacterByIdUseCase.invoke(id).onEach { resultState ->
+            when(resultState) {
+                is ResultState.Failed<*> -> {}
+                is ResultState.Loading<*> -> {
+                    _uiState.update { it.copy(isLoading = true) }
+                }
+                is ResultState.Success<*> -> {
+                    _uiState.update { it.copy(isLoading = false, character = resultState.data) }
                 }
             }
         }.launchIn(viewModelScope)

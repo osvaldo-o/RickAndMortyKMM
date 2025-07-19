@@ -5,6 +5,7 @@ import osvaldo.oso.domain.model.Character
 import osvaldo.oso.domain.model.Status
 
 fun CharacterApi.toCharacter() = Character(
+    id = this.id,
     name = this.name,
     status = toStatus(this.status),
     species = this.species,

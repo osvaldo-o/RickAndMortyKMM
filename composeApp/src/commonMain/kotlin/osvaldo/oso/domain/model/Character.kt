@@ -1,6 +1,7 @@
 package osvaldo.oso.domain.model
 
 data class Character(
+    val id: Int,
     val name: String,
     val status: Status,
     val species: String,

@@ -1,5 +1,8 @@
 package osvaldo.oso.presentation.character
 
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,15 +31,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import osvaldo.oso.domain.model.Character
 import osvaldo.oso.domain.model.Status
 import osvaldo.oso.presentation.component.GlassCard
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun CharactersScreen(
     characters: List<Character>,
-    modifier: Modifier = Modifier
+    onCharacterClick: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope
 ) {
     Scaffold { paddingValues ->
         BackgroundScreen {
@@ -47,41 +53,59 @@ fun CharactersScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 items(characters) { character ->
-                    CharacterItem(character)
+                    CharacterItem(
+                        character = character,
+                        onClick = { onCharacterClick(character.id) },
+                        sharedTransitionScope = sharedTransitionScope,
+                        animatedVisibilityScope = animatedVisibilityScope
+                    )
                 }
             }
         }
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-private fun CharacterItem(character: Character) {
-    GlassCard(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(180.dp),
-        blurRadius = 32.dp,
-        cornerRadius = 18.dp,
-        backgroundColor = Color(0x4f584f).copy(alpha = 0.6f)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth().wrapContentHeight(),
-            horizontalArrangement = Arrangement.Center
+private fun CharacterItem(
+    character: Character,
+    onClick: () -> Unit,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope
+) {
+    with(sharedTransitionScope) {
+        GlassCard(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(180.dp),
+            onClick = onClick,
+            blurRadius = 32.dp,
+            cornerRadius = 18.dp,
+            backgroundColor = Color(0x4f584f).copy(alpha = 0.6f)
         ) {
-            CharacterImage(
-                url = character.urlImage,
-                modifier = Modifier
-                    .weight(0.4f)
-                    .fillMaxHeight()
-            )
-            CharacterData(
-                character = character,
-                modifier = Modifier
-                    .weight(0.6f)
-                    .padding(horizontal = 8.dp, vertical = 16.dp)
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth().wrapContentHeight(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                CharacterImage(
+                    url = character.urlImage,
+                    modifier = Modifier
+                        .weight(0.4f)
+                        .fillMaxHeight()
+                        .sharedElement(
+                            rememberSharedContentState(key = "imagen-${character.id}"),
+                            animatedVisibilityScope = animatedVisibilityScope
+                        )
+                )
+                CharacterData(
+                    character = character,
+                    modifier = Modifier
+                        .weight(0.6f)
+                        .padding(horizontal = 8.dp, vertical = 16.dp)
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                )
+            }
         }
     }
 }
@@ -164,38 +188,20 @@ private fun StatusAndSpecie(
 }
 
 @Composable
-private fun BackgroundScreen(
+fun BackgroundScreen(
+    modifierImage: Modifier = Modifier,
+    urlImage: String = "https://s0.smartresize.com/wallpaper/776/686/HD-wallpaper-rick-y-morty-portal-phone-rick-and-morty-thumbnail.jpg",
     content: @Composable () -> Unit
 ) {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
         AsyncImage(
-            model = "https://s0.smartresize.com/wallpaper/776/686/HD-wallpaper-rick-y-morty-portal-phone-rick-and-morty-thumbnail.jpg",
+            model = urlImage,
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
+            modifier = modifierImage.fillMaxSize()
         )
         content()
     }
-}
-
-@Preview
-@Composable
-fun CharacterItemPreview() {
-    val character = Character(
-        name = "Rick Sanchez",
-        status = Status.ALIVE,
-        species = "Human",
-        gender = "Male",
-        urlImage = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
-        locationName = "Citadel of Ricks",
-        originName = "Earth (C-137)"
-    )
-    MaterialTheme {
-        Column(Modifier.fillMaxWidth().padding(16.dp)) {
-            CharacterItem(character)
-        }
-    }
-
 }
