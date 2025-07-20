@@ -11,8 +11,11 @@ class CharacterRepositoryImpl (
     private val ktorApiClient: KtorApiClient
 ) : CharacterRepository {
 
-    override suspend fun getCharacters(): Result<List<CharacterApi>, Error> {
-        val response = ktorApiClient.get<ResponseApi>("character")
+    override suspend fun getCharacters(page: Int): Result<List<CharacterApi>, Error> {
+        val response = ktorApiClient.get<ResponseApi>(
+            route = "character",
+            parameters = mapOf("page" to page.toString())
+        )
         response.error?.let { error ->
             return Result.Failed(error)
         }

@@ -45,6 +45,30 @@ class HomeViewModel constructor(
         _uiState.update { it.copy(character = character) }
     }
 
+    fun getCharacterByPage() {
+        if (uiState.value.currentPage+1 > 42) {
+            _uiState.update { it.copy(isPageLimit = true) }
+            return
+        }
+        getCharactersUseCase.invoke(uiState.value.currentPage+1).onEach { resultState ->
+            when(resultState) {
+                is ResultState.Failed<*> -> {}
+                is ResultState.Loading<*> -> {
+                    _uiState.update { it.copy(isLoading = true) }
+                }
+                is ResultState.Success<*> -> {
+                    _uiState.update { it.copy(isLoading = false) }
+                    resultState.data?.let { characters ->
+                        _uiState.update { it.copy(
+                            characters = (it.characters + characters).distinct(),
+                            currentPage = it.currentPage + 1
+                        ) }
+                    }
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
     fun getCharacterById(id: Int) {
         getCharacterByIdUseCase.invoke(id).onEach { resultState ->
             when(resultState) {

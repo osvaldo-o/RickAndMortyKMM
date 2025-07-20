@@ -7,7 +7,7 @@ import osvaldo.oso.data.remote.model.CharacterApi
 
 interface CharacterRepository {
 
-    suspend fun getCharacters(): Result<List<CharacterApi>, Error>
+    suspend fun getCharacters(page: Int): Result<List<CharacterApi>, Error>
 
     suspend fun getCharacterById(id: Int): Result<CharacterApi, Error>
 

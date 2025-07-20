@@ -38,7 +38,9 @@ fun App() {
                             navController.navigate(CharacterDetailScreen)
                         },
                         sharedTransitionScope = this@SharedTransitionLayout,
-                        animatedVisibilityScope = this@composable
+                        animatedVisibilityScope = this@composable,
+                        getCharacters = { viewModel.getCharacterByPage() },
+                        isPageLimit = uiState.isPageLimit,
                     )
                 }
 

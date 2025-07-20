@@ -19,11 +19,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import kotlinx.coroutines.flow.distinctUntilChanged
 import osvaldo.oso.domain.model.Character
 import osvaldo.oso.domain.model.Status
 import osvaldo.oso.presentation.component.GlassCard
@@ -42,11 +46,25 @@ fun CharactersScreen(
     onCharacterClick: (Character) -> Unit,
     modifier: Modifier = Modifier,
     sharedTransitionScope: SharedTransitionScope,
-    animatedVisibilityScope: AnimatedVisibilityScope
+    animatedVisibilityScope: AnimatedVisibilityScope,
+    getCharacters: () -> Unit,
+    isPageLimit: Boolean
 ) {
+    val lazyListState = rememberLazyListState()
+    LaunchedEffect(lazyListState.canScrollForward) {
+        snapshotFlow { lazyListState.canScrollForward }
+            .distinctUntilChanged()
+            .collect { canScrollForward ->
+                if (!canScrollForward && !isPageLimit) {
+                    getCharacters()
+                }
+            }
+    }
+
     Scaffold { paddingValues ->
         BackgroundScreen {
             LazyColumn(
+                state = lazyListState,
                 modifier = modifier
                     .padding(paddingValues)
                     .padding(horizontal = 16.dp, vertical = 12.dp),
