@@ -2,6 +2,8 @@ package osvaldo.oso.presentation.viewmodel.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Delay
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -31,7 +33,7 @@ class HomeViewModel constructor(
                 is ResultState.Loading<*> -> {
                     _uiState.update { it.copy(isLoading = true) }
                 }
-                is ResultState.Success<*> -> {
+                is ResultState.Success<List<Character>> -> {
                     _uiState.update { it.copy(isLoading = false) }
                     resultState.data?.let { characters ->
                         _uiState.update { it.copy(characters = characters) }
@@ -57,6 +59,7 @@ class HomeViewModel constructor(
                     _uiState.update { it.copy(isLoading = true) }
                 }
                 is ResultState.Success<*> -> {
+                    delay(5000)
                     _uiState.update { it.copy(isLoading = false) }
                     resultState.data?.let { characters ->
                         _uiState.update { it.copy(

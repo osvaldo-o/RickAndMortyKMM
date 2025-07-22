@@ -38,6 +38,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import osvaldo.oso.domain.model.Character
 import osvaldo.oso.domain.model.Status
 import osvaldo.oso.presentation.component.GlassCard
+import osvaldo.oso.presentation.component.LoadingComponent
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -48,14 +49,15 @@ fun CharactersScreen(
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
     getCharacters: () -> Unit,
-    isPageLimit: Boolean
+    isPageLimit: Boolean,
+    isLoading: Boolean
 ) {
     val lazyListState = rememberLazyListState()
     LaunchedEffect(lazyListState.canScrollForward) {
         snapshotFlow { lazyListState.canScrollForward }
             .distinctUntilChanged()
             .collect { canScrollForward ->
-                if (!canScrollForward && !isPageLimit) {
+                if (!canScrollForward && !isPageLimit && !isLoading) {
                     getCharacters()
                 }
             }
@@ -77,6 +79,15 @@ fun CharactersScreen(
                         sharedTransitionScope = sharedTransitionScope,
                         animatedVisibilityScope = animatedVisibilityScope
                     )
+                }
+                if (characters.isNotEmpty() && isLoading) {
+                    item {
+                        LoadingComponent(
+                            isLoading,
+                            modifierWrapper = Modifier.fillMaxSize().height(48.dp),
+                            modifierContent = Modifier.size(24.dp)
+                        )
+                    }
                 }
             }
         }
