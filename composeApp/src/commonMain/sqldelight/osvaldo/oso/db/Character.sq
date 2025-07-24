@@ -1,0 +1,43 @@
+CREATE TABLE Character (
+    id INTEGER PRIMARY KEY NOT NULL,
+    name TEXT NOT NULL,
+    status TEXT NOT NULL,
+    species TEXT NOT NULL,
+    gender TEXT NOT NULL,
+    originName TEXT NOT NULL,
+    locationName TEXT NOT NULL,
+    urlImage TEXT NOT NULL
+);
+
+-- Obtener todos los personajes
+selectAll:
+SELECT *
+FROM Character;
+
+-- Obtener un personaje por id
+selectById:
+SELECT *
+FROM Character
+WHERE id = ?;
+
+-- Insertar un personaje
+insertCharacter:
+INSERT OR REPLACE INTO Character(
+    id,
+    name,
+    status,
+    species,
+    gender,
+    originName,
+    locationName,
+    urlImage
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+
+-- Eliminar todos los personajes
+deleteAll:
+DELETE FROM Character;
+
+-- Eliminar un personaje por id
+deleteById:
+DELETE FROM Character
+WHERE id = ?;
