@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.sqldelight)
 }
 
 kotlin {
@@ -41,6 +42,9 @@ kotlin {
             // koin
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
+
+            // sqldelight
+            implementation(libs.sqldelight.android)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -71,9 +75,16 @@ kotlin {
 
             // navigation
             implementation(libs.navigation.compose)
+
+            // sqldelight
+            implementation(libs.sqldelight.runtime)
+            implementation(libs.sqldelight.coroutines)
         }
         nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)
+
+            // sqldelight
+            implementation(libs.sqldelight.native)
         }
         iosMain.dependencies {
             // ktor client
@@ -114,3 +125,10 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
 }
 
+sqldelight {
+    databases {
+        create("Database") {
+            packageName.set("rick.and.morty.db")
+        }
+    }
+}
