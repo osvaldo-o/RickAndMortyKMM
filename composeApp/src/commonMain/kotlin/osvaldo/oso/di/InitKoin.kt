@@ -3,11 +3,10 @@ package osvaldo.oso.di
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 
-fun initKoin(config: KoinAppDeclaration? = null) {
+fun initKoin(appDeclaration: KoinAppDeclaration = {}) {
     startKoin {
-        config?.invoke(this)
+        appDeclaration()
         modules(
-            dataModule,
             presentationModule
         )
     }

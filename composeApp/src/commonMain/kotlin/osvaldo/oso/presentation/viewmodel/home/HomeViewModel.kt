@@ -2,13 +2,14 @@ package osvaldo.oso.presentation.viewmodel.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Delay
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import osvaldo.oso.core.model.Error
+import osvaldo.oso.core.model.RemoteErrorWithCode
 import osvaldo.oso.core.model.ResultState
 import osvaldo.oso.domain.model.Character
 import osvaldo.oso.domain.usecase.GetCharacterUseCase
@@ -29,7 +30,8 @@ class HomeViewModel constructor(
     private fun getCharacters() {
         getCharactersUseCase.invoke().onEach { resultState ->
             when(resultState) {
-                is ResultState.Failed<*> -> {}
+                is ResultState.Failed<*> -> {
+                }
                 is ResultState.Loading<*> -> {
                     _uiState.update { it.copy(isLoading = true) }
                 }

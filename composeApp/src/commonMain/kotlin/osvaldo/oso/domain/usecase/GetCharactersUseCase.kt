@@ -16,12 +16,13 @@ class GetCharactersUseCase (
     fun invoke(page: Int = 1): Flow<ResultState<List<Character>, Error>> = flow {
         emit(ResultState.Loading())
         if (page > 42) {
-            emit(ResultState.Failed(RemoteErrorWithCode(error = Error.Remote.CLIENT_ERROR, code = 400)))
+            emit(ResultState.Failed(Error.Remote.CLIENT_ERROR))
             return@flow
         }
         val response = repository.getCharacters(page)
         response.error?.let { error ->
             emit(ResultState.Failed(error))
+            return@flow
         }
         emit(ResultState.Success(response.data?.map { characterApi ->
             characterApi.toCharacter()

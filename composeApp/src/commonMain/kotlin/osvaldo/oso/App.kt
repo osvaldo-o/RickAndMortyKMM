@@ -26,6 +26,7 @@ import osvaldo.oso.presentation.viewmodel.home.HomeViewModel
 @Preview
 fun App() {
     MaterialTheme {
+
         val navController = rememberNavController()
         val viewModel: HomeViewModel = koinViewModel()
         val uiState by viewModel.uiState.collectAsStateWithLifecycle()

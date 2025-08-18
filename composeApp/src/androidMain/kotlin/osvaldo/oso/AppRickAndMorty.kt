@@ -2,6 +2,8 @@ package osvaldo.oso
 
 import android.app.Application
 import org.koin.android.ext.koin.androidContext
+import osvaldo.oso.di.DatabaseDriverFactory
+import osvaldo.oso.di.dataModule
 import osvaldo.oso.di.initKoin
 
 class AppRickAndMorty : Application() {
@@ -10,6 +12,7 @@ class AppRickAndMorty : Application() {
         super.onCreate()
         initKoin {
             androidContext(this@AppRickAndMorty)
+            modules(dataModule(DatabaseDriverFactory(this@AppRickAndMorty)))
         }
     }
 }

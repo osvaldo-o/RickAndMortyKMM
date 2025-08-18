@@ -2,13 +2,15 @@ package osvaldo.oso.data.repository
 
 import osvaldo.oso.core.model.Error
 import osvaldo.oso.core.model.Result
+import osvaldo.oso.data.local.source.LocalDataSource
 import osvaldo.oso.data.remote.ktorClient.KtorApiClient
 import osvaldo.oso.data.remote.model.CharacterApi
 import osvaldo.oso.data.remote.model.ResponseApi
 import osvaldo.oso.domain.repository.CharacterRepository
 
 class CharacterRepositoryImpl (
-    private val ktorApiClient: KtorApiClient
+    private val ktorApiClient: KtorApiClient,
+    private val localDataSource: LocalDataSource
 ) : CharacterRepository {
 
     override suspend fun getCharacters(page: Int): Result<List<CharacterApi>, Error> {
