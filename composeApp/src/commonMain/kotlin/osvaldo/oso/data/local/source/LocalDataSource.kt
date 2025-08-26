@@ -1,11 +1,14 @@
 package osvaldo.oso.data.local.source
 
-import osvaldo.oso.data.local.model.CharacterDB
+import kotlinx.coroutines.flow.Flow
+import osvaldo.oso.db.Character
 
 interface LocalDataSource {
 
-    suspend fun getCharacters(): List<CharacterDB>
+    fun getCharacters(): Flow<List<Character>>
 
-    suspend fun insertCharacters(characters: List<CharacterDB>)
+    suspend fun insertCharacter(character: Character)
+
+    suspend fun deleteCharacter(id: Long)
 
 }

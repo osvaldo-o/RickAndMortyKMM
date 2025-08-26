@@ -1,42 +1,40 @@
 package osvaldo.oso.data.local.source
 
-import osvaldo.oso.data.local.model.CharacterDB
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.flow.Flow
+import osvaldo.oso.db.Character
 import rick.and.morty.db.Database
 
 class LocalDataSourceImpl(
-    private val db: Database
+    val db: Database,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : LocalDataSource {
 
     private val queries = db.characterQueries
 
-    override suspend fun getCharacters(): List<CharacterDB> {
-        return queries.selectAll().executeAsList().map {
-            CharacterDB(
-                id = it.id.toInt(),
-                name = it.name,
-                status = it.status,
-                species = it.species,
-                gender = it.gender,
-                originName = it.originName,
-                locationName = it.locationName,
-                urlImage = it.urlImage
-            )
-        }
+    override fun getCharacters(): Flow<List<Character>> {
+        return queries.selectAll().asFlow().mapToList(dispatcher)
     }
 
-    override suspend fun insertCharacters(characters: List<CharacterDB>) {
-        characters.map { character ->
-            queries.insertCharacter(
-                id = character.id.toLong(),
-                name = character.name,
-                status = character.status,
-                species = character.species,
-                gender = character.gender,
-                originName = character.originName,
-                locationName = character.locationName,
-                urlImage = character.urlImage
-            )
-        }
+    override suspend fun insertCharacter(character: Character) {
+        queries.insertCharacter(
+            character.id,
+            character.name,
+            character.status,
+            character.species,
+            character.gender,
+            character.originName,
+            character.locationName,
+            character.urlImage
+        )
+    }
+
+    override suspend fun deleteCharacter(id: Long) {
+        queries.deleteById(id)
     }
 
 }

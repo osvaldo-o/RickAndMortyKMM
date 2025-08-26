@@ -1,11 +1,16 @@
 package osvaldo.oso.data.repository
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import osvaldo.oso.core.model.Error
 import osvaldo.oso.core.model.Result
 import osvaldo.oso.data.local.source.LocalDataSource
+import osvaldo.oso.data.mapper.toCharacter
+import osvaldo.oso.data.mapper.toCharacterDB
 import osvaldo.oso.data.remote.ktorClient.KtorApiClient
 import osvaldo.oso.data.remote.model.CharacterApi
 import osvaldo.oso.data.remote.model.ResponseApi
+import osvaldo.oso.domain.model.Character
 import osvaldo.oso.domain.repository.CharacterRepository
 
 class CharacterRepositoryImpl (
@@ -30,6 +35,18 @@ class CharacterRepositoryImpl (
             return Result.Failed(error)
         }
         return Result.Success(response.data)
+    }
+
+    override suspend fun saveCharacter(character: Character) {
+        localDataSource.insertCharacter(character.toCharacterDB())
+    }
+
+    override fun getCharacterFavorite(): Flow<List<Character>> {
+        return localDataSource.getCharacters().map { characters -> characters.map { it.toCharacter() } }
+    }
+
+    override suspend fun deleteCharacter(id: Int) {
+        localDataSource.deleteCharacter(id.toLong())
     }
 
 }
