@@ -6,6 +6,7 @@ data class HomeUiState(
     val characters: List<Character> = emptyList(),
     val character: Character? = null,
     val isLoading: Boolean = false,
+    val message: String = "",
     val messageError: String = "",
     val currentPage: Int = 1,
     val isPageLimit: Boolean = false

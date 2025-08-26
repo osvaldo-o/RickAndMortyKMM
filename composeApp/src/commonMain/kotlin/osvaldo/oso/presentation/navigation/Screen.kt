@@ -6,4 +6,7 @@ import kotlinx.serialization.Serializable
 object CharactersScreen
 
 @Serializable
-object CharacterDetailScreen
+object CharactersFavoriteScreen
+
+@Serializable
+data class CharacterDetailScreen(val isFavorite: Boolean)
