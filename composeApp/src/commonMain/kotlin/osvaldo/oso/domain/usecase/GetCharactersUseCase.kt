@@ -3,7 +3,6 @@ package osvaldo.oso.domain.usecase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import osvaldo.oso.core.model.Error
-import osvaldo.oso.core.model.RemoteErrorWithCode
 import osvaldo.oso.core.model.ResultState
 import osvaldo.oso.domain.mapper.toCharacter
 import osvaldo.oso.domain.model.Character
